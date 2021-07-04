@@ -12,7 +12,7 @@ CallbackQueue.prototype = {
 		this.results.push({data: data})
 		this.handler(this)
 	},
-	_addTyped: function(type) {
+	_addTyped: function addToQueueTyped(type) {
 		var _this = this
 		return function addTypedClosure(data) {
 			_this.results.push({type: type, data: data})
@@ -37,15 +37,16 @@ callbackMethod(timerQueue.add)
 callbackMethod(timerQueue.add)
 callbackMethod(timerQueue.add)
 callbackMethod(timerQueue.add)
-callbackMethod(timerQueue.add)
+callbackMethod(timerQueue.addTyped('nice'))
 
 
 
-
+// callback method
 function callbackMethod(cb) {
 	var time = 400 + Math.random() * 1000
 	setTimeout(function callbackMethod_done() {
 		var data = getRandomStr(2 + Math.random() * 40 | 0)
+		// console.log(cb)
 		cb([data, time])
 	}, time)
 }
@@ -59,11 +60,12 @@ function getRandomStr(len) {
 }
 
 
-// If you use an even older version of js,
+
+// Function.prototype.bind alternative, for if you use an even older version of js.
 // instead of doing var bound = fn.bind(this)
 // var bound = closureThisBind(fn, this)
 function closureThisBind(method, _this) {
 	return function Bounded() {
-		method.apply(_this, arguments)
+		return method.apply(_this, arguments)
 	}
 }
